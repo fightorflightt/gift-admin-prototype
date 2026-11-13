@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="呆萌价礼金工具交互原型">
+<title>礼金工具 · 呆萌价后台</title>
+<link rel="stylesheet" href="./styles.css">
+<script defer src="./app.js"></script>
+</head>
+<body>
+<svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 32 32"><path fill="#2888f1" d="m2 3 14 4 14-4v13l-14-4-14 4z"/><path d="m3 20 13-4 13 4M3 24l13-4 13 4M3 28l13-4 13 4" fill="none" stroke="#468bdc" stroke-width="2"/></symbol>
+  <symbol id="gift" viewBox="0 0 24 24"><path d="M3 8h18v4H3zm2 4v8h14v-8M12 8v12m0-12C8 8 6 7 6 5s4-3 6 3Zm0 0c4 0 6-1 6-3s-4-3-6 3Z"/></symbol>
+  <symbol id="orders" viewBox="0 0 24 24"><path d="M5 9 8 5h8l3 4m-14 0h14v11H5Zm4 4h6"/></symbol>
+  <symbol id="link" viewBox="0 0 24 24"><path d="m10 8 3-3a4 4 0 0 1 6 6l-3 3m-2 2-3 3a4 4 0 0 1-6-6l3-3m0 6 8-8"/></symbol>
+  <symbol id="download" viewBox="0 0 24 24"><path d="M12 4v12m-5-5 5 5 5-5M5 20h14"/></symbol>
+  <symbol id="menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+  <symbol id="close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="left" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+  <symbol id="right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+</svg>
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><svg aria-hidden="true"><use href="#logo"></use></svg><span>呆萌价用户订单后台系统</span></div>
+  <nav aria-label="后台导航">
+    <span class="nav-item"><svg aria-hidden="true"><use href="#orders"></use></svg>用户订单统计</span>
+    <span class="nav-item"><svg aria-hidden="true"><use href="#orders"></use></svg>每月结算记录</span>
+    <span class="nav-item"><svg aria-hidden="true"><use href="#link"></use></svg>批量转链</span>
+    <a class="nav-item current" href="#records"><svg aria-hidden="true"><use href="#gift"></use></svg>礼金工具</a>
+    <span class="nav-item"><svg aria-hidden="true"><use href="#download"></use></svg>导出列表</span>
+  </nav>
+</aside>
+<div class="workspace">
+  <header class="topbar">
+    <button class="icon-button" id="menu-button" aria-label="切换侧边栏" aria-controls="sidebar" aria-expanded="true"><svg aria-hidden="true"><use href="#menu"></use></svg></button>
+    <div class="top-title"><svg aria-hidden="true"><use href="#gift"></use></svg>礼金工具</div>
+    <div class="account"><span class="demo-badge">演示原型</span><span class="avatar" aria-hidden="true">代</span>代理账号</div>
+  </header>
+  <main>
+    <section class="panel" id="records-page" aria-labelledby="records-heading">
+      <header class="panel-header"><h1 id="records-heading">礼金创建记录</h1><button class="primary" type="button" id="open-create"><svg aria-hidden="true"><use href="#plus"></use></svg>创建礼金</button></header>
+      <section class="statistics" aria-labelledby="stats-heading">
+        <div class="stats-heading"><h2 id="stats-heading">礼金数据统计</h2><span>四项指标按当前筛选条件汇总</span></div>
+        <div class="stats" id="stats"></div>
+        <div class="quotas" id="quotas"></div>
+      </section>
+      <form class="filters" id="filters">
+        <label>平台 <select name="platform"><option value="">全部平台</option><option value="tb">淘宝</option><option value="jd">京东</option><option value="vip">唯品会</option></select></label>
+        <fieldset class="filter-range"><legend class="sr-only">创建时间</legend><span aria-hidden="true">创建时间</span><input aria-label="创建开始日期" name="start" type="date"><span class="muted">至</span><input aria-label="创建结束日期" name="end" type="date"></fieldset>
+        <label>发放状态 <select name="status"><option value="">全部</option><option>进行中</option><option>已结束</option><option>已停止</option></select></label>
+        <label>商品 <input name="keyword" type="search" placeholder="请输入商品标题或商品 ID"></label>
+        <div class="filter-actions"><button type="submit" class="primary">查询</button><button type="reset">重置</button></div>
+      </form>
+      <div class="table-scroll">
+        <table class="records-table" aria-label="礼金创建记录">
+          <colgroup><col class="product-col"></colgroup><colgroup><col class="info-col"><col class="setting-col"><col class="validity-col"></colgroup><colgroup><col class="count-col"><col class="money-col"><col class="status-col"></colgroup><colgroup><col class="action-col"></colgroup>
+          <thead><tr class="group-row"><th scope="colgroup">商品信息</th><th scope="colgroup" colspan="3">礼金创建信息</th><th scope="colgroup" colspan="3">礼金使用情况</th><th scope="col" rowspan="2">操作</th></tr>
+          <tr><th scope="col" class="left">商品</th><th scope="col" class="left">创建信息</th><th scope="col" class="left">礼金设置</th><th scope="col" class="left">有效期</th><th scope="col">领取个数</th><th scope="col">核销金额</th><th scope="col">发放状态</th></tr></thead>
+          <tbody id="records"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="records-pagination"></div>
+    </section>
+    <section id="orders-page" hidden aria-labelledby="orders-heading"></section>
+  </main>
+</div>
+<dialog id="create-dialog" class="dialog create-dialog" aria-labelledby="create-heading">
+  <form id="create-form">
+    <div class="dialog-header"><h2 id="create-heading">创建礼金</h2><button class="icon-button" type="button" data-close="create-dialog" aria-label="关闭创建礼金"><svg aria-hidden="true"><use href="#close"></use></svg></button></div>
+    <div class="dialog-body create-body">
+      <div class="form-row platform-row"><span class="field-label required">平台</span><div class="segments" role="group" aria-label="礼金平台" id="platform-options"></div></div>
+      <section class="form-section" aria-labelledby="product-heading">
+        <h3 id="product-heading">选择商品</h3>
+        <div class="form-row"><label class="field-label required" for="source">商品口令或链接</label><div class="source-control"><input id="source" name="source" placeholder="请输入商品口令、链接或商品 ID" required><button type="button" id="identify">识别商品</button></div></div>
+        <div class="form-row offset"><div class="product-preview" id="selected-product"><button type="button" class="text-button" id="use-example">填入演示商品</button></div></div>
+      </section>
+      <section class="form-section" aria-labelledby="settings-heading">
+        <h3 id="settings-heading">设置礼金</h3>
+        <div class="form-row"><label class="field-label required" for="amount">单个礼金</label><div class="amount-grid">
+          <div class="unit-field"><input id="amount" name="amount" type="number" min="0.01" max="200" step="0.01" inputmode="decimal" required><span>元</span></div>
+          <span class="times">×</span><label class="field-label required" for="quantity">发放个数</label>
+          <div class="unit-field"><input id="quantity" name="quantity" type="number" min="1" max="50" step="1" inputmode="numeric" required><span>个</span></div>
+        </div></div>
+        <div id="platform-fields"></div>
+      </section>
+      <section class="form-section" aria-labelledby="validity-heading">
+        <h3 id="validity-heading">设置有效期</h3>
+        <div id="date-fields"></div>
+      </section>
+      <p class="form-error" id="create-error" role="alert" hidden></p>
+    </div>
+    <footer class="dialog-footer"><div class="gift-total"><span>礼金总额</span><strong id="total">¥0.00</strong></div><div class="footer-actions"><button type="button" data-close="create-dialog">取消</button><button type="submit" class="primary">创建礼金</button></div></footer>
+  </form>
+</dialog>
+<dialog class="dialog copy-dialog" id="copy-dialog" aria-labelledby="copy-heading">
+  <div class="dialog-header"><h2 id="copy-heading">复制文案</h2><button class="icon-button" type="button" data-close="copy-dialog" aria-label="关闭复制文案"><svg aria-hidden="true"><use href="#close"></use></svg></button></div>
+  <div class="dialog-body">
+    <div class="summary-product" id="copy-product"></div>
+    <label class="copy-label" for="promotion">推广文案</label><textarea id="promotion" rows="5" readonly></textarea>
+  </div>
+  <footer class="dialog-footer"><div class="footer-actions"><button type="button" data-close="copy-dialog">取消</button><button type="button" id="copy-button" class="primary">复制文案</button></div></footer>
+</dialog>
+<dialog class="dialog confirm-dialog" id="confirm-dialog" aria-labelledby="stop-heading">
+  <div class="dialog-header"><h2 id="stop-heading">停止发放</h2><button class="icon-button" type="button" data-close="confirm-dialog" aria-label="关闭停止发放"><svg aria-hidden="true"><use href="#close"></use></svg></button></div>
+  <div class="dialog-body"><p id="stop-copy"></p><p class="muted">停止后，用户无法继续领取该批礼金。</p></div>
+  <footer class="dialog-footer"><div class="footer-actions"><button type="button" data-close="confirm-dialog">取消</button><button type="button" class="danger" id="confirm-stop">确认停止</button></div></footer>
+</dialog>
+<div class="toast" role="status" id="toast" hidden></div>
+</body>
+</html>
